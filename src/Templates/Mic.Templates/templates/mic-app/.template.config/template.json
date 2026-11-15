@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Rovika Software, Inc",
+  "classifications": [ "MIC", "ORM", "Console" ],
+  "identity": "Mic.App",
+  "name": "MIC application",
+  "shortName": "mic-app",
+  "description": "A MIC application in three projects: the entity model, a console host that connects to its database, and a test; the database tool's configs beside the host.",
+  "tags": { "language": "C#", "type": "solution" },
+  "sourceName": "Shop",
+  "preferNameDirectory": true,
+  "symbols": {
+    "provider": {
+      "type": "parameter",
+      "datatype": "choice",
+      "description": "The database server the application connects to.",
+      "defaultValue": "Postgres",
+      "replaces": "PROVIDER_KIND",
+      "choices": [
+        { "choice": "Postgres", "description": "PostgreSQL" },
+        { "choice": "MySql", "description": "MySQL" },
+        { "choice": "MsSql", "description": "SQL Server" },
+        { "choice": "Oracle", "description": "Oracle" },
+        { "choice": "SQLite", "description": "SQLite: a file, nothing to install" }
+      ]
+    },
+    "micVersion": {
+      "type": "parameter",
+      "datatype": "string",
+      "description": "The version of the MIC packages referenced.",
+      "defaultValue": "$(Version)",
+      "replaces": "MIC_VERSION"
+    },
+    "Postgres": { "type": "computed", "value": "(provider == \"Postgres\")" },
+    "MySql": { "type": "computed", "value": "(provider == \"MySql\")" },
+    "MsSql": { "type": "computed", "value": "(provider == \"MsSql\")" },
+    "Oracle": { "type": "computed", "value": "(provider == \"Oracle\")" },
+    "SQLite": { "type": "computed", "value": "(provider == \"SQLite\")" },
+    "lowerName": {
+      "type": "derived",
+      "valueSource": "name",
+      "valueTransform": "lowerCaseInvariant",
+      "replaces": "shop"
+    },
+    "upperName": {
+      "type": "derived",
+      "valueSource": "name",
+      "valueTransform": "upperCaseInvariant",
+      "replaces": "SHOP"
+    }
+  },
+  "sources": [
+    {
+      "modifiers": [
+        { "exclude": [ "**/bin/**", "**/obj/**", "**/*.db" ] }
+      ]
+    }
+  ]
+}

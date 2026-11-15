@@ -1,0 +1,78 @@
+- name: Overview
+  href: overview.md
+- name: Simple application
+  href: simple-application.md
+- name: Feature highlights
+  href: highlights.md
+- name: Using MIC ORM
+  items:
+    - name: Getting started
+      href: getting-started.md
+    - name: Application data model
+      href: data-model.md
+    - name: Entity members and types
+      href: entity-members.md
+    - name: Application startup
+      href: startup.md
+    - name: Core runtime objects
+      href: core-objects.md
+    - name: Reading data
+      href: linq-queries.md
+    - name: Updating data
+      href: saving-changes.md
+- name: Advanced features
+  items:
+    - name: Database objects
+      href: database-objects.md
+    - name: Maintaining the database schema
+      href: database-model.md
+    - name: Temp tables
+      href: temp-tables.md
+    - name: JSON
+      href: json.md
+    - name: Full-text search
+      href: full-text.md
+    - name: Geographic points
+      href: geo-points.md
+    - name: Data cache
+      href: data-cache.md
+    - name: QueryMaker
+      href: querymaker.md
+    - name: Direct SQL
+      href: direct-sql.md
+    - name: Locking records
+      href: locking.md
+    - name: Smart loading
+      href: smart-loading.md
+    - name: Guid generation
+      href: guid-generation.md
+    - name: Logging
+      href: logging.md
+    - name: C# attributes for modeling
+      href: attributes.md
+- name: Application extensions
+  items:
+    - name: About application extensions
+      href: app-extensions.md
+    - name: Multi-tenancy extension
+      href: multi-tenancy.md
+    - name: Soft delete extension
+      href: soft-delete.md
+- name: How to…
+  href: how-to.md
+- name: Database server specifics
+  href: servers.md
+- name: Setup in ASP.NET Core
+  href: aspnet-core.md
+- name: Tools
+  items:
+    - name: Generating entities from a database
+      href: tool-entities.md
+    - name: Generating the upgrade script
+      href: tool-upgrade.md
+- name: Running tests
+  href: running-tests.md
+- name: Advanced example - Beauty Shop
+  href: beauty-shop.md
+- name: Migrating from VITA
+  href: migrating-from-vita.md

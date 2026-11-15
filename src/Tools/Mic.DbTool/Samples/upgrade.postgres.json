@@ -1,0 +1,8 @@
+{
+  "$schema": "../mic-db.schema.json",
+  // The Beauty Shop sample against the local test PostgreSQL: the script that would create its schema there.
+  "provider": "Postgres",
+  "connectionString": "Host=localhost;Port=5433;Database=mic_test;Username=mic;Password=mic",
+  "appAssembly": "../../../Samples/BeautyShop/bin/Debug/net10.0/BeautyShop.dll",
+  "output": "beauty.upgrade.postgres.sql"
+}

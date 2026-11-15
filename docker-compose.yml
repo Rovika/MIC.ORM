@@ -1,0 +1,129 @@
+# Test servers for the ORM suite.
+#
+# EPHEMERAL BY DEFAULT — MySQL, SQL Server and Oracle keep nothing between runs. Every `up` starts them on a clean
+# server, which is what a suite that tests schema creation and upgrade wants: a leftover table from a previous run
+# would make a passing test meaningless. The suite does not rely on this — each fixture creates and drops its own
+# schema — so it is a second guard rather than the only one.
+#
+# POSTGRESQL IS THE EXCEPTION, and holds a NAMED VOLUME. It carries two things that want opposite storage: the
+# suite's own `mic_test`, which wants to be disposable, and the `BeautyShop` SAMPLE database, which is a thing a
+# person OPENS — the data browser points at it — and which cost two hand rebuilds when it lived in tmpfs and went
+# with the container. The suite is unaffected: it works in schemas it makes and removes inside `mic_test`.
+#
+#   docker compose up -d postgres      # start
+#   docker compose down                # stop; the sample SURVIVES, being on a volume
+#   docker compose down -v             # stop and discard the sample too
+#
+# Rebuilding the sample after `down -v`, or from nothing:
+#   dotnet run --project src/Samples/BeautyShop -- --drop
+#
+# The port is 5433, not 5432, so a PostgreSQL already installed on the machine keeps its port and nobody has to choose
+# between them.
+services:
+  postgres:
+    # The PostGIS build of postgres:17, for the geographic point type; the data volume is the same.
+    image: postgis/postgis:17-3.5
+    container_name: mic-test-postgres
+    environment:
+      POSTGRES_USER: mic
+      POSTGRES_PASSWORD: mic
+      POSTGRES_DB: mic_test
+    ports:
+      - "5433:5432"
+    # A VOLUME, where the other servers get tmpfs — see the header. Named rather than anonymous so that it is not
+    # collected by a prune and can be discarded deliberately (`down -v`) rather than by accident.
+    volumes:
+      - mic-test-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mic -d mic_test"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
+  mysql:
+    image: mysql:8.4
+    container_name: mic-test-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: mic
+      MYSQL_DATABASE: mic_test
+    # Root, because the suite CREATES AND DROPS DATABASES: a MySQL "schema" is a database, so isolating a test means
+    # making one, and that is not a privilege an ordinary application user has.
+    command: --local-infile=0
+    ports:
+      - "3307:3306"          # 3306 left to any MySQL already installed
+    tmpfs:
+      - /var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-pmic"]
+      interval: 3s
+      timeout: 5s
+      retries: 30
+
+  # OPT-IN, and the profile is what makes it so: `docker compose up -d` brings PostgreSQL and MySQL only, because the
+  # inner loop has to stay in seconds. This image is ~1.5 GB and wants 2 GB of memory before it will start at all.
+  #
+  #   docker compose --profile heavy up -d --wait
+  #   MIC_TEST_VENDORS=all dotnet test
+  # BUILT, NOT PULLED: the stock image has no Full-Text Search, and `docker/sqlserver/Dockerfile` adds the package on
+  # top of it. `docker compose --profile heavy build sqlserver` after changing the Dockerfile.
+  sqlserver:
+    build: ./docker/sqlserver
+    image: mic-test-sqlserver:2022-fts
+    container_name: mic-test-sqlserver
+    profiles: ["heavy"]
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Mic_test_1"     # its own rules: 8+, and three of upper/lower/digit/symbol
+      MSSQL_PID: Developer
+    ports:
+      - "1434:1433"          # 1433 left to any SQL Server already installed
+    tmpfs:
+      # The uid matters: the image runs as `mssql` (10001), and a tmpfs mounts owned by root — without this SQL Server
+      # cannot create its own system directory and the container exits with "Access Denied" before it ever listens.
+      - /var/opt/mssql:uid=10001,gid=10001
+    healthcheck:
+      # `-C` trusts the self-signed certificate the container generates; without it the tool refuses to connect and the
+      # container never reports healthy.
+      test: ["CMD-SHELL",
+             "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P Mic_test_1 -C -Q 'SELECT 1' || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 40
+      start_period: 20s
+
+  # OPT-IN, same profile and for the same reason. The heaviest of the set, and the slowest to become ready — hence a
+  # generous start_period rather than a long retry list, so a failure is reported as a failure rather than as a wait.
+  #
+  #   docker compose --profile heavy up -d --wait
+  #   MIC_TEST_VENDORS=all dotnet test
+  #
+  # NO tmpfs here, unlike the others: Oracle wants gigabytes under /opt/oracle/oradata and putting that in memory buys
+  # nothing on a machine that then has to swap. The container's own writable layer is discarded by `compose down`,
+  # which is all "ephemeral" ever meant.
+  # NOT THE SLIM IMAGE: slim strips Oracle Text (no CTXSYS, no CONTEXT component), which full-text search needs. The
+  # regular image is under a gigabyte larger. The init script grants SYSTEM what Oracle Text needs — it runs once, when
+  # the container first creates its database, so a change to it wants `docker compose rm -f oracle` first.
+  oracle:
+    image: gvenzl/oracle-free:23
+    container_name: mic-test-oracle
+    profiles: ["heavy"]
+    environment:
+      ORACLE_PASSWORD: mic          # SYS and SYSTEM
+    ports:
+      - "1522:1521"          # 1521 left to any Oracle already installed
+    volumes:
+      - ./docker/oracle-init:/container-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 5s
+      timeout: 5s
+      retries: 40
+      start_period: 60s
+
+# The sample database's storage. Declared so it is NAMED — an anonymous volume is discarded by a prune without
+# saying what it belonged to, which is how the sample was lost once already.
+volumes:
+  mic-test-pgdata:
+    # NAMED EXPLICITLY, or compose prefixes it with the project — `mic_mic-test-pgdata` — and the name a person types
+    # in `docker volume` is not the name in this file. Still compose-managed, so `down -v` still removes it.
+    name: mic-test-pgdata

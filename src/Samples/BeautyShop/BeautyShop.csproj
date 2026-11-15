@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- The Beauty Shop sample's ENTITY MODEL: attributed interfaces, an EntityModule and an EntityApp, which MIC maps
+       to a db model and upgrades a PostgreSQL database into.
+
+       IT REFERENCES Mic.Orm, unlike Mic.TestApp.PeopleModel under the tests — and the contrast is the point. The People
+       sample is DOCUMENT-authored, so its C# is enums and DTOs with no framework reference at all; this one is
+       C#-FIRST, which is the other authoring path and the only one that works today. The two samples demonstrate the
+       two halves.
+
+       A SAMPLE, and also the model the query-engine unit tests translate against: Mic.Tests.Orm references it for
+       its realistic shape.
+
+       Everything else — TargetFramework, LangVersion, … — comes from Directory.Build.props. -->
+
+  <!-- AN EXE AS WELL AS A LIBRARY. `BeautySetup` rebuilds the sample database in one command, and a second project
+       holding nothing but a Main would be ceremony — `Mic.Tests.Orm` still references this for the model-only tests,
+       which an Exe project serves exactly as a library does. See BeautySetup for how it is run. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Orm\Mic.Orm\Mic.Orm.csproj" />
+    <!-- The setup connects, so it needs the vendor as well as the core. The MODEL needs neither — it is
+         vendor-neutral by construction, and that is the whole point of it. -->
+    <ProjectReference Include="..\..\Orm\Mic.Orm.Db.Postgres\Mic.Orm.Db.Postgres.csproj" />
+  </ItemGroup>
+
+</Project>

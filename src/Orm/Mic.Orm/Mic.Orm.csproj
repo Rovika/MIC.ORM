@@ -1,0 +1,82 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\Imports\Packages.proj" />
+
+	<PropertyGroup>
+		<RootNamespace>Mic.Orm</RootNamespace>
+		<Description>MIC ORM: a .NET ORM in which an entity is a C# interface and the database schema follows the model. LINQ, schema upgrade and one model for PostgreSQL, SQL Server, MySQL, Oracle and SQLite. Add the provider package of the server in use.</Description>
+	</PropertyGroup>
+
+	<!-- THE PACKAGE CARRIES THE FOUR SHARED ASSEMBLIES. Mic.Common, Mic.Modeling, Mic.Emit and Mic.Linq are not
+	     packages of their own: their assemblies and documentation files go into this package's lib folder beside
+	     Mic.Orm's, and the package names no dependency. An application references Mic.Orm, or a provider, and has
+	     all five.
+
+	     The dependencies are suppressed whole, which is right only while none of the five projects references a
+	     package: a package reference here is refused at pack, and one added to a shared project has to be thought
+	     of the same way. When the client is published the shared assemblies become packages again. -->
+	<PropertyGroup>
+		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+		<!-- NU5128: a lib folder for net10.0 and no dependency group for it, which is what is meant here. -->
+		<NoWarn>$(NoWarn);NU5128</NoWarn>
+		<TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeSharedAssembliesInPackage</TargetsForTfmSpecificBuildOutput>
+	</PropertyGroup>
+
+	<!-- Taken from this project's output folder, where the build copied them; a target that resolved the
+	     references instead would build them, which a pack with no build refuses. The names are those of the four
+	     project references below. -->
+	<Target Name="IncludeSharedAssembliesInPackage">
+		<ItemGroup>
+			<_SharedAssemblyName Include="Mic.Common;Mic.Modeling;Mic.Emit;Mic.Linq" />
+			<_SharedAssemblyFile Include="$(OutputPath)%(_SharedAssemblyName.Identity).dll" />
+			<_SharedAssemblyFile Include="$(OutputPath)%(_SharedAssemblyName.Identity).xml" />
+			<BuildOutputInPackage Include="@(_SharedAssemblyFile)" Condition="Exists('%(_SharedAssemblyFile.Identity)')" />
+		</ItemGroup>
+		<Error Condition="!Exists('$(OutputPath)%(_SharedAssemblyName.Identity).dll')"
+		       Text="%(_SharedAssemblyName.Identity).dll is not in $(OutputPath); build Mic.Orm before packing it." />
+	</Target>
+
+	<Target Name="RefusePackageReferencesInFoldedPackage" BeforeTargets="GenerateNuspec">
+		<ItemGroup>
+			<_OwnPackageReference Include="@(PackageReference)" Condition="'%(PackageReference.IsImplicitlyDefined)' != 'true'" />
+		</ItemGroup>
+		<Error Condition="'@(_OwnPackageReference)' != ''"
+		       Text="Mic.Orm is packed with its dependencies suppressed, and references the package(s) @(_OwnPackageReference). Declare them as the package's dependencies before packing." />
+	</Target>
+
+	<!-- Mic.Common, Mic.Modeling, Mic.Emit and Mic.Linq are the ONLY MIC references allowed here (ORM_VISION.md /
+	     Decided): Common for shared utilities, Emit because the runtime entity classes are emitted, and Modeling
+	     because the TRANSFERRABLE db model lives there — `Mic.Modeling.Db` holds the `*Def` types the design surface
+	     reads, plus the vocabulary both levels share (`DbServerKind`, `KeyFlags`, `DbColumnFlags`, `DdlKind`,
+	     `DdlStatement`). That reference used to be for the ORM's model types subclassing Modeling's bases; ORM_25
+	     removed the inheritance and left the reference behind unused, and ORM_35 gave it a reason again.
+
+	     Mic.Linq is the query engine, and the dependency runs THIS WAY ROUND ONLY: the engine is shared with the
+	     client and may not know what an entity, a session or a database is, so it declares what it needs and the ORM
+	     implements it (`ISqlTarget`, answered by `DbSqlTarget`). LayeringTests holds both directions.
+
+	     The dependency set is small ON PURPOSE: the ORM ships as SHARED SOURCE, and publishing is transitive, so
+	     everything named here ships with it. Nothing from Mic.Server.*, Mic.Client.* or ASP.NET — that is what keeps
+	     the ORM usable standalone.
+
+	     The dependency runs ONE WAY and a test says so: Mic.Emit knows nothing about the ORM. -->
+	<ItemGroup>
+		<ProjectReference Include="..\..\Shared\Mic.Common\Mic.Common.csproj" />
+		<ProjectReference Include="..\..\Shared\Mic.Modeling\Mic.Modeling.csproj" />
+		<ProjectReference Include="..\..\Shared\Mic.Emit\Mic.Emit.csproj" />
+		<ProjectReference Include="..\..\Shared\Mic.Linq\Mic.Linq.csproj" />
+	</ItemGroup>
+
+	<!-- `EntityApp.CreateDataSource` is internal: an application CONNECTS, it does not map. What it offers that
+	     ConnectToAsync does not is a db model built for a provider that will never be reached — which the model-only
+	     suite needs for every vendor and no application ever does. Visible to the tests rather than public, so the API
+	     is not shaped by them. -->
+	<ItemGroup>
+		<InternalsVisibleTo Include="Mic.Tests.Orm" />
+		<InternalsVisibleTo Include="Mic.Tests.Orm.DbHarness" />
+		<InternalsVisibleTo Include="Mic.Tests.Orm.Dml" />
+		<InternalsVisibleTo Include="Mic.Tests.Orm.Linq" />
+		<InternalsVisibleTo Include="Mic.DbTool" />
+	</ItemGroup>
+
+</Project>

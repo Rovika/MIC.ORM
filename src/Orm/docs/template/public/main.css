@@ -1,0 +1,8 @@
+/* The site's own styles, over the modern template's. DocFX picks this file up through the "template" entry in
+   docfx.json. */
+
+/* Third-level headings close to the text size: a feature caption, not a chapter. */
+article h3 {
+  font-size: 1.25rem;
+  margin-top: 1.5rem;
+}

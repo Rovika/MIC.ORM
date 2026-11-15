@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MIC database tool config",
+  "description": "A job of the MIC database tool: the database, the application and where the output goes. Paths are relative to this file.",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "provider": {
+      "description": "The kind of server.",
+      "type": "string",
+      "enum": [ "Postgres", "MySql", "MsSql", "SQLite", "Oracle" ]
+    },
+    "connectionString": {
+      "description": "The connection string the database is read with: the value itself, or env:NAME for an environment variable holding it, or file:path for a file holding it, the path relative to this file. Keep a secret out of a file that goes into a repository.",
+      "type": "string"
+    },
+    "schemaConnectionString": {
+      "description": "The connection string schema changes run on when the script is applied, in the forms connectionString takes; the connection string itself when absent.",
+      "type": [ "string", "null" ]
+    },
+    "appAssembly": {
+      "description": "The path of the assembly holding the application, for the upgrade job.",
+      "type": "string"
+    },
+    "appClass": {
+      "description": "For the upgrade job, the full name of the application's EntityApp class, the one such class in the assembly when absent; for the entities job, the name of the class written, DbApp when absent.",
+      "type": [ "string", "null" ]
+    },
+    "providerPath": {
+      "description": "The folder the provider and its driver are loaded from; the application assembly's folder when absent.",
+      "type": [ "string", "null" ]
+    },
+    "output": {
+      "description": "The path of the file the job writes; the job's default name in this file's folder when absent.",
+      "type": [ "string", "null" ]
+    },
+    "dropUnknownTables": {
+      "description": "Whether the upgrade script drops tables the model does not know.",
+      "type": "boolean",
+      "default": false
+    },
+    "ignoreDbObjects": {
+      "description": "Patterns of the database objects the upgrade script neither drops nor changes. Each is compared with an object's path, such as sales.Order.IX_Report_Month, ignoring case; * stands for any run of characters.",
+      "type": "array",
+      "items": { "type": "string" },
+      "default": []
+    },
+    "options": {
+      "description": "How the model is mapped to the database for the upgrade job: DbOptions flags separated by commas, from UseRefIntegrity, AutoIndexForeignKeys, PluralizeTableNames, AddSchemaToTableNames.",
+      "type": "string",
+      "default": "UseRefIntegrity"
+    },
+    "schemas": {
+      "description": "The schemas the entities job reads; every schema but the system ones when absent.",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "tables": {
+      "description": "The tables and views the entities job takes, as names or patterns with * and ?, a schema prefix allowed as in sales.Order*; every table of the schemas when absent.",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "ignoreTables": {
+      "description": "The tables and views the entities job leaves out, in the form tables takes.",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "namespace": {
+      "description": "The namespace the entities job writes.",
+      "type": "string",
+      "default": "Generated"
+    },
+    "module": {
+      "description": "The name of the module the entities job writes; the schema's name followed by Module when absent. With several schemas each module is named after its schema, this name appended.",
+      "type": [ "string", "null" ]
+    },
+    "lists": {
+      "description": "Whether the entities job writes a list member on a referenced entity for each entity referencing it.",
+      "type": "boolean",
+      "default": true
+    },
+    "autoGuidKeys": {
+      "description": "Whether the entities job marks a single-column Guid primary key [Auto].",
+      "type": "boolean",
+      "default": true
+    },
+    "addDbObjectsNames": {
+      "description": "Whether the entities job names every table, column, key and foreign key in an attribute, so that any identifier in the file can be renamed and the mapping stands. Off, a name is written only where it differs from what MIC would derive.",
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [ "provider", "connectionString" ],
+  "additionalProperties": false
+}

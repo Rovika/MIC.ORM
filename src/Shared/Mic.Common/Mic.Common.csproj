@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <AssemblyName>Mic.Common</AssemblyName>
+	  <!-- Not a package of its own: the assembly and its documentation file ship inside the Mic.Orm package. -->
+	  <IsPackable>false</IsPackable>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <DebugType>embedded</DebugType>
+	  <EmbedAllSources>true</EmbedAllSources>
+  </PropertyGroup>
+
+</Project>

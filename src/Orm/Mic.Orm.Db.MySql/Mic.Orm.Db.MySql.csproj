@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\Imports\Packages.proj" />
+
+	<PropertyGroup>
+		<RootNamespace>Mic.Orm.Db.MySql</RootNamespace>
+		<Description>The MySQL provider of MIC ORM, over MySqlConnector.</Description>
+	</PropertyGroup>
+
+	<!-- The third provider, and the first that disagrees by doing MORE: InnoDB indexes every foreign key without being
+	     asked, and names every primary key itself. -->
+	<ItemGroup>
+		<PackageReference Include="MySqlConnector" Version="2.6.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Mic.Orm\Mic.Orm.csproj" />
+	</ItemGroup>
+
+</Project>

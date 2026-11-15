@@ -1,0 +1,13 @@
+{
+  "$schema": "../mic-db.schema.json",
+  // The Beauty Shop database on the local test PostgreSQL, read back as entity declarations. The provider is taken
+  // from the built sample's output folder, which holds it with its driver.
+  "provider": "Postgres",
+  "connectionString": "Host=localhost;Port=5433;Database=BeautyShop;Username=mic;Password=mic",
+  "providerPath": "../../../Samples/BeautyShop/bin/Debug/net10.0",
+  "schemas": [ "beauty" ],
+  "namespace": "BeautyShop.Generated",
+  "appClass": "BeautyShopApp",
+  "module": "BeautyShopModule",
+  "output": "BeautyShopApp.generated.cs"
+}

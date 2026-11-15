@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\Imports\Packages.proj" />
+
+	<PropertyGroup>
+		<RootNamespace>Mic.Orm.Db.SqlServer</RootNamespace>
+		<Description>The SQL Server provider of MIC ORM, over Microsoft.Data.SqlClient.</Description>
+	</PropertyGroup>
+
+	<!-- The fourth provider, and the first MIC was partly written FOR without ever having met: ClusteredStorage and
+	     bracket quoting have existed since the feature set was first written, exercised only by an invented double. -->
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="7.1.1" />
+		<PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Mic.Orm\Mic.Orm.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,14 @@
+{
+  // The entity model of an existing database, as C# source:
+  //   mic-db entities mic-db/entities.json          writes Shop.generated.cs beside this file
+  // Review it, then move it into the model project in place of the starter entities. Build the host first: the tool
+  // loads the provider and the driver from the output folder. Narrow a large database with "schemas", "tables" and
+  // "ignoreTables".
+  "provider": "PROVIDER_KIND",
+  "connectionString": "env:SHOP_CONN",
+  "providerPath": "../bin/Debug/net10.0",
+  "namespace": "Shop.Model",
+  "appClass": "ShopDbApp",
+  "module": "ShopDbModule",
+  "output": "Shop.generated.cs"
+}

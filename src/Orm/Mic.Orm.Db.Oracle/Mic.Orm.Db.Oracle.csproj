@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\Imports\Packages.proj" />
+
+	<PropertyGroup>
+		<RootNamespace>Mic.Orm.Db.Oracle</RootNamespace>
+		<Description>The Oracle provider of MIC ORM, over Oracle.ManagedDataAccess.Core.</Description>
+	</PropertyGroup>
+
+	<!-- The fifth provider, and the one the row contract was written for: no information_schema in any form, so every
+	     catalog query is replaced and none of the base's SQL survives. -->
+	<ItemGroup>
+		<PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.26.301" />
+		<PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Mic.Orm\Mic.Orm.csproj" />
+	</ItemGroup>
+
+</Project>

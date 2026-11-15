@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\Imports\Packages.proj" />
+
+	<PropertyGroup>
+		<RootNamespace>Mic.Orm.Db.Postgres</RootNamespace>
+		<Description>The PostgreSQL provider of MIC ORM, over Npgsql.</Description>
+	</PropertyGroup>
+
+	<!-- The first PROVIDER (Vita's "driver"). Npgsql is referenced HERE and only here — the core sees
+	     System.Data.Common, which is what keeps a driver package out of every application that uses MIC. -->
+	<ItemGroup>
+		<PackageReference Include="Npgsql" Version="10.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Mic.Orm\Mic.Orm.csproj" />
+	</ItemGroup>
+
+</Project>

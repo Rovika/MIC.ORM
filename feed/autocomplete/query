@@ -1,0 +1,1 @@
+{"index":"sleet-static","totalHits":8,"data":["Mic.DbTool","Mic.Orm","Mic.Orm.Db.MySql","Mic.Orm.Db.Oracle","Mic.Orm.Db.Postgres","Mic.Orm.Db.Sqlite","Mic.Orm.Db.SqlServer","Mic.Templates"],"@context":{"@vocab":"http://schema.nuget.org/schema#","totalHits":{"@type":"http://www.w3.org/2001/XMLSchema#integer"}}}

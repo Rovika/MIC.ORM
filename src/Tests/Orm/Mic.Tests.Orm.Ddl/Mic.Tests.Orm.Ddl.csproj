@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<IsPackable>false</IsPackable>
+		<IsTestProject>true</IsTestProject>
+		<RootNamespace>Mic.Tests.Orm.Db</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.9.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.11.0" />
+		<PackageReference Include="MSTest.TestAdapter" Version="4.5.1" />
+		<PackageReference Include="MSTest.TestFramework" Version="4.5.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Mic.Tests.Orm.DbHarness\Mic.Tests.Orm.DbHarness.csproj" />
+		<ProjectReference Include="..\..\..\Tools\Mic.DbTool\Mic.DbTool.csproj" />
+		<!-- Nothing to reference: the template holds no code. The reference has it restored and built with the suite,
+		     which packs it with `- -no-build`. -->
+		<ProjectReference Include="..\..\..\Templates\Mic.Templates\Mic.Templates.csproj" ReferenceOutputAssembly="false" />
+	</ItemGroup>
+
+</Project>

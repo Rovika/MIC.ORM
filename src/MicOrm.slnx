@@ -1,0 +1,46 @@
+<Solution>
+  <Folder Name="/Orm/">
+    <Project Path="Orm/Mic.Orm.Db.MySql/Mic.Orm.Db.MySql.csproj" />
+    <Project Path="Orm/Mic.Orm.Db.Oracle/Mic.Orm.Db.Oracle.csproj" />
+    <Project Path="Orm/Mic.Orm.Db.Postgres/Mic.Orm.Db.Postgres.csproj" />
+    <Project Path="Orm/Mic.Orm.Db.Sqlite/Mic.Orm.Db.Sqlite.csproj" />
+    <Project Path="Orm/Mic.Orm.Db.SqlServer/Mic.Orm.Db.SqlServer.csproj" />
+    <Project Path="Orm/Mic.Orm/Mic.Orm.csproj" />
+  </Folder>
+  <Folder Name="/Orm/docs/">
+    <File Path="Orm/docs/README.md" />
+    <File Path="Orm/docs/docfx.json" />
+    <File Path="Orm/docs/build.ps1" />
+    <File Path="Orm/docs/index.md" />
+    <File Path="Orm/docs/toc.yml" />
+    <File Path="Orm/docs/llms.txt" />
+    <File Path="Orm/docs/guide/toc.yml" />
+  </Folder>
+  <Folder Name="/Shared/">
+    <Project Path="Shared/Mic.Common/Mic.Common.csproj" />
+    <Project Path="Shared/Mic.Emit/Mic.Emit.csproj" />
+    <Project Path="Shared/Mic.Linq/Mic.Linq.csproj" />
+    <Project Path="Shared/Mic.Modeling/Mic.Modeling.csproj" />
+  </Folder>
+  <Folder Name="/Tools/">
+    <Project Path="Tools/Mic.DbTool/Mic.DbTool.csproj" />
+  </Folder>
+  <Folder Name="/Templates/">
+    <Project Path="Templates/Mic.Templates/Mic.Templates.csproj" />
+  </Folder>
+  <Folder Name="/Samples/">
+    <Project Path="Samples/BeautyShop/BeautyShop.csproj" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="Tests/Orm/Mic.Tests.Orm.DbHarness/Mic.Tests.Orm.DbHarness.csproj" />
+    <Project Path="Tests/Orm/Mic.Tests.Orm.Ddl/Mic.Tests.Orm.Ddl.csproj" />
+    <Project Path="Tests/Orm/Mic.Tests.Orm.Dml/Mic.Tests.Orm.Dml.csproj" />
+    <Project Path="Tests/Orm/Mic.Tests.Orm.Linq/Mic.Tests.Orm.Linq.csproj" />
+    <Project Path="Tests/Orm/Mic.Tests.Orm/Mic.Tests.Orm.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+    <File Path=".runsettings" />
+    <File Path="Imports/Packages.proj" />
+  </Folder>
+</Solution>

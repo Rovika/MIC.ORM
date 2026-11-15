@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The test settings Visual Studio's Test Explorer picks up for this solution. The server suites read the vendors
+     from MIC_TEST_VENDORS; this file sets the per-step pair. A wider run is a command line:
+       MIC_TEST_VENDORS=postgres,mysql,sqlite,mssql dotnet test src/MicOrm.slnx
+     The guide's page "Running tests" has the rest. -->
+<RunSettings>
+  <RunConfiguration>
+    <EnvironmentVariables>
+      <MIC_TEST_VENDORS>postgres,sqlite</MIC_TEST_VENDORS>
+    </EnvironmentVariables>
+  </RunConfiguration>
+</RunSettings>

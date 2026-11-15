@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\Imports\Packages.proj" />
+
+	<PropertyGroup>
+		<RootNamespace>Mic.Orm.Db.Sqlite</RootNamespace>
+		<Description>The SQLite provider of MIC ORM, over Microsoft.Data.Sqlite.</Description>
+	</PropertyGroup>
+
+	<!-- The second provider, and the one that tests whether the abstraction is real: SQLite has no schemas, cannot
+	     alter a column, takes constraints only inside CREATE TABLE, and keeps no catalog worth the name. -->
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.13" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Mic.Orm\Mic.Orm.csproj" />
+	</ItemGroup>
+
+</Project>

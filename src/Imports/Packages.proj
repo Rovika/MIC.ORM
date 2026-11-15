@@ -1,0 +1,16 @@
+<!-- What every published package of the ORM carries. Imported by the projects that are packed: Mic.Orm, its five
+     providers, the database tool and the templates. A project's own properties, set after the import, win. -->
+<Project>
+  <PropertyGroup>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/Rovika/Mic.Orm</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Rovika/Mic.Orm</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>orm;database;linq;postgresql;sqlserver;mysql;oracle;sqlite</PackageTags>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- The symbols and the sources are inside each assembly, so a debugger steps into the ORM from a package
+         with nothing else to download and whatever commit the package was built from. -->
+    <DebugType>embedded</DebugType>
+    <EmbedAllSources>true</EmbedAllSources>
+  </PropertyGroup>
+</Project>

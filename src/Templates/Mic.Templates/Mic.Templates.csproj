@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\Imports\Packages.proj" />
+
+  <!-- THE PROJECT TEMPLATES, a package for `dotnet new`: `mic-app` produces a MIC application in three projects —
+       the entity model, a console host that connects to its database, and a test — with the database tool's configs
+       beside the host, for the server chosen with `- -provider`.
+
+       The content under `templates/` is not compiled here; it is packed as it is and compiled where it is
+       instantiated, referencing the MIC packages by version. The DDL suite packs this and the ORM packages, makes an
+       application from it per vendor, builds it, and on PostgreSQL and SQLite runs its test and its host. -->
+  <PropertyGroup>
+    <PackageType>Template</PackageType>
+    <PackageId>Mic.Templates</PackageId>
+    <Description>Project templates for a MIC application: `dotnet new mic-app`.</Description>
+    <PackageTags>dotnet-new;templates;mic;orm</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <ContentTargetFolders>content</ContentTargetFolders>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+    <NoDefaultExcludes>true</NoDefaultExcludes>
+    <TemplateConfigFolder>templates\mic-app\.template.config\</TemplateConfigFolder>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);PackTemplateConfig</TargetsForTfmSpecificContentInPackage>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="templates\**\*"
+             Exclude="templates\**\bin\**;templates\**\obj\**;templates\**\*.db;$(TemplateConfigFolder)template.json" />
+    <Compile Remove="**\*" />
+    <None Include="README.md" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+  <!-- THE VERSION A GENERATED APPLICATION REFERENCES is the version this package is packed with. template.json holds
+       the token $(Version) as the default of its micVersion symbol; a copy with the version in its place is written
+       to obj and packed where the file would be. Installing the template from the source folder, unpacked, needs
+       `- -micVersion`. -->
+  <Target Name="PackTemplateConfig">
+    <PropertyGroup>
+      <TemplateConfigPacked>$(MSBuildProjectDirectory)\$(BaseIntermediateOutputPath)template.json</TemplateConfigPacked>
+      <TemplateConfigText>$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)\$(TemplateConfigFolder)template.json'))</TemplateConfigText>
+      <TemplateConfigText>$(TemplateConfigText.Replace('%24(Version)', '$(Version)'))</TemplateConfigText>
+    </PropertyGroup>
+    <WriteLinesToFile File="$(TemplateConfigPacked)" Lines="$([MSBuild]::Escape($(TemplateConfigText)))"
+                      Overwrite="true" WriteOnlyWhenDifferent="true" />
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="$(TemplateConfigPacked)" PackagePath="content\$(TemplateConfigFolder)" />
+    </ItemGroup>
+  </Target>
+
+</Project>

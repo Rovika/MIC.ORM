@@ -1,0 +1,10 @@
+{
+  // The script that brings a database up to the model, for a production upgrade done by hand:
+  //   mic-db upgrade mic-db/upgrade.json            writes upgrade.sql beside this file, applies nothing
+  //   mic-db upgrade mic-db/upgrade.json --apply    runs it
+  // Build the host first: the tool loads the application, its provider and the driver from the output folder.
+  "provider": "PROVIDER_KIND",
+  "connectionString": "env:SHOP_CONN",
+  "appAssembly": "../bin/Debug/net10.0/Shop.Model.dll",
+  "output": "upgrade.sql"
+}

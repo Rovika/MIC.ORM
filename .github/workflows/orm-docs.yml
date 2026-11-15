@@ -1,0 +1,54 @@
+# Builds the ORM documentation site and publishes it to GitHub Pages, with the package feed beside it: the folder
+# `feed` of the repository, as the publish script left it, served under /feed/.
+#
+# The job runs only where the repository variable ORM_DOCS_PAGES is "true": the published ORM repository sets it,
+# the development repository does not. Pages must be set to "GitHub Actions" as the source in the repository's
+# settings. The site build needs the docs folder and the tool manifest only; it does not compile the ORM, and it
+# does not build packages. A deployment replaces the whole site, so every run carries both the pages and the feed.
+name: ORM docs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - src/Orm/docs/**
+      - feed/**
+      - .config/dotnet-tools.json
+      - .github/workflows/orm-docs.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: orm-docs
+  cancel-in-progress: true
+
+jobs:
+  build:
+    if: vars.ORM_DOCS_PAGES == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - run: dotnet tool restore
+      - run: pwsh src/Orm/docs/build.ps1
+      - name: Put the package feed beside the pages
+        run: if [ -d feed ]; then cp -r feed src/Orm/docs/_site/feed; fi
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: src/Orm/docs/_site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

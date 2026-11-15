@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- The entity model: the attributed interfaces, the module that declares them and the application class. It
+       references the ORM core alone and knows no database server; the host chooses the server. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Mic.Orm" Version="MIC_VERSION" />
+  </ItemGroup>
+
+</Project>

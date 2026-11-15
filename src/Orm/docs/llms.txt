@@ -1,0 +1,79 @@
+# MIC ORM
+
+> A .NET 10 ORM in which an entity is a C# interface, the implementing class is emitted at startup, and the
+> database is derived from the model on every connect: no migrations, no entity classes. PostgreSQL, SQL Server,
+> MySQL, Oracle and SQLite from one model. Not Entity Framework: no DbContext, no DbSet, no data annotations.
+
+## Guide
+
+- [Overview](guide/overview.html): a full-featured .NET ORM, part of the MIC framework, the successor of VITA.
+- [Simple application](guide/simple-application.html): one program with the model, the module, the application,
+  the startup, a save and a query.
+- [Feature highlights](guide/highlights.html): the features in short: entities as interfaces, modules, tracking,
+  saves, LINQ, servers, the data and query caches, full-text, JSON, schema maintenance, database objects,
+  database first, QueryMaker, smart loading, application extensions.
+
+## Using MIC ORM
+
+- [Getting started](guide/getting-started.html): `dotnet new mic-app`, pointing it at a database, running it,
+  editing the data model.
+- [Application data model](guide/data-model.html): an entity is an interface, modules and the application,
+  database-agnostic, database first.
+- [Entity members and types](guide/entity-members.html): member types and column types, nullability and size,
+  the column type set explicitly with `[Column]`, the primary key, reference members, list members,
+  `IQueryable<T>` members, generated values, computed members.
+- [Application startup](guide/startup.html): the startup sequence, `Init`, `ConnectToAsync`, the connected
+  application a singleton, `DbSettings`, the connection string, startup errors, the shutdown.
+- [Core runtime objects](guide/core-objects.html): `OperationContext`,
+  `EntitySession`, entity tracking.
+- [Reading data](guide/linq-queries.html): loading by primary key, stubs, lazy loading of related entities, LINQ
+  queries, `QueryOptions`, the N+1 problem, `Include`.
+- [Updating data](guide/saving-changes.html): changing entities, `ClientFault`, `SaveChanges`, transactions, set-based
+  updates in LINQ, scheduled statements.
+
+## Advanced features
+
+- [Database objects](guide/database-objects.html): indexes, views, sequences, table-valued functions, computed
+  columns.
+- [Maintaining the database schema](guide/database-model.html): scripts and migrations, or the schema derived
+  from the C# model; what a connect does; the `DbInfo` table.
+- [Temp tables](guide/temp-tables.html): a list of values as an entity the session fills and joins.
+- [JSON](guide/json.html): `[Json]` members, typed documents, `[FromJson]` columns.
+- [Full-text search](guide/full-text.html): the full-text index, `FullText.Matches` and `FullText.Rank`.
+- [Geographic points](guide/geo-points.html): `GeoPoint` members, the spatial index, `GeoFunctions.Distance`.
+- [Data cache](guide/data-cache.html): cached entities, the queries answered in memory.
+- [QueryMaker](guide/querymaker.html): a query composed at run time from names.
+- [Direct SQL](guide/direct-sql.html): SQL text run through the session.
+- [Locking records](guide/locking.html): `WriteLock`, `LockForUpdate`, snapshot reads, `[RowVersion]`.
+- [Smart loading](guide/smart-loading.html): the smart lazy load, where `Include` fits and where it does not,
+  the three hooks (a reference, a list member, a query over an `IQueryable<T>` member), the bounds,
+  `DisableSmartLoad`.
+- [Guid generation](guide/guid-generation.html): Guid keys made in the application and ordered by time, the
+  versions, the time read out of a key with `EntityHelper.GetTimestamp`, SQL Server's layout, `GuidScheme`.
+- [Logging](guide/logging.html): the operation's log and its modes, the file log for development, `ILogListener`
+  for production.
+- [C# attributes for modeling](guide/attributes.html): the attributes used most, each with an example.
+
+## Application extensions
+
+- [About application extensions](guide/app-extensions.html): a cross-cutting rule as one class; filters on every
+  read, handlers on the save.
+- [Multi-tenancy extension](guide/multi-tenancy.html): `ITenant` and `ITenantBound`, `TenantMemberName` and
+  `[TenantId]` for an existing database, the tenant from the context; tenants across databases, a composite
+  tenant key, a database added at run time through `DatabaseEvents.DatabaseMissing`.
+- [Soft delete extension](guide/soft-delete.html): `ISoftDeleteEntity`, `DeletedMemberName` and `[DeletedMark]` for
+  an existing database, a delete that writes the mark.
+
+## Reference
+
+- [How to…](guide/how-to.html): quick answers, one question per heading.
+- [Generating entities from a database](guide/tool-entities.html): `mic-db entities`, database first.
+- [Generating the upgrade script](guide/tool-upgrade.html): `mic-db upgrade`, the DDL for review.
+- [Running tests](guide/running-tests.html): the suites, the servers in Docker, `MIC_TEST_VENDORS`, run times,
+  the SQL log.
+- [Advanced example - Beauty Shop](guide/beauty-shop.html): the multi-tenant example application and its source.
+- [Migrating from VITA](guide/migrating-from-vita.html): what changed, what is new, the steps.
+
+## Full text
+
+- [llms-full.txt](llms-full.txt): the whole guide as one markdown file.

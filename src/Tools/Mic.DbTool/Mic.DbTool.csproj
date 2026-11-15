@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\Imports\Packages.proj" />
+
+  <!-- THE DATABASE TOOL, a console installable as a dotnet tool: `mic-db upgrade <config>` writes the DDL script
+       that brings a database up to an application's model, for a production upgrade done by hand.
+
+       It references the ORM core alone. The provider for the database in hand, and the driver under it, are loaded
+       from the application's own output folder, where the application keeps them to connect, or from a folder the
+       config names; carrying all five drivers in the tool would make it several times its size for four that never
+       run. Everything else — TargetFramework, LangVersion, … — comes from Directory.Build.props. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Mic.DbTool</RootNamespace>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>mic-db</ToolCommandName>
+    <PackageId>Mic.DbTool</PackageId>
+    <Description>The MIC database tool: upgrade scripts from an application's model, entities from a database.</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Orm\Mic.Orm\Mic.Orm.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The config's schema travels with the tool, so an editor validates and completes a config next to it. -->
+    <None Include="mic-db.schema.json" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="" />
+    <None Include="README.md" Pack="true" PackagePath="" />
+    <None Include="Samples\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <!-- A sample run writes its source next to its config; the file kept there is output to look at, not part of
+         the tool. -->
+    <Compile Remove="Samples\**" />
+    <None Include="Samples\*.cs" />
+  </ItemGroup>
+
+</Project>

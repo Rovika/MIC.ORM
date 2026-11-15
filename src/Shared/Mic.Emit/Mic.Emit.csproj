@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<AssemblyName>Mic.Emit</AssemblyName>
+		<!-- Not a package of its own: the assembly and its documentation file ship inside the Mic.Orm package. -->
+		<IsPackable>false</IsPackable>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<DebugType>embedded</DebugType>
+		<EmbedAllSources>true</EmbedAllSources>
+	</PropertyGroup>
+
+	<!-- NO PROJECT REFERENCES, and that is the point rather than an accident: this builds classes over interfaces and
+	     knows nothing about what they are for. A reference appearing here is the design going wrong. -->
+
+</Project>

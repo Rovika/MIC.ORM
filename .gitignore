@@ -1,0 +1,27 @@
+# Build output
+bin/
+obj/
+*.binlog
+
+# The documentation site, built by src/Orm/docs/build.ps1
+src/Orm/docs/_site/
+
+# Test output
+TestResults/
+*.trx
+
+# Editors and user settings
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.rsuser
+
+# Local secrets
+*.env
+
+# Packages built locally. The published packages are under feed/, which is kept.
+*.nupkg
+*.snupkg
+!feed/**
